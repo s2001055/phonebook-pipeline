@@ -28,3 +28,25 @@ jobs:
                   checkstring: 'OK'
                   delay: 5
                   rollbackonhealthcheckfailed: true
+    tag_release:
+        needs: [pipeline_deployment]
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: '0'
+            - name: Bump version and push tag
+              if: ${{ github.event_name == 'push' }}
+              uses: anothrNick/github-tag-action@1.36.0
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  DEFAULT_BUMP: patch
+                  WITH_V: false
+                  DRY_RUN: true
+            - name: version deployed
+              uses: rjstone/discord-webhook-notify@v1
+              if: success()
+              with:
+                  severity: info
+                  details: Version deploy succeeded!
+                  webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
