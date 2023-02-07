@@ -27,6 +27,7 @@ const unknownEndpoint = (req, res) => {
     res.status(404).send({ error: 'unknown endpoint' });
 };
 
+// eslint-disable-next-line
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 
 app.use(express.json());
@@ -102,6 +103,10 @@ app.put('/api/contacts/:id', async (req, res, next) => {
     } catch (err) {
         next(err);
     }
+});
+
+app.get('/health', (req, res) => {
+    res.send('OK');
 });
 
 app.use(errorHandler);
