@@ -15,8 +15,6 @@ jobs:
                   node-version: '16'
             - name: npm install
               run: npm install
-            - name: npm start
-              run: npm start
             - name: lint
               run: npm run eslint
             - name: depoloy to heroku
